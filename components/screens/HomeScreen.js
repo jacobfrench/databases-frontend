@@ -1,0 +1,207 @@
+import React from 'react';
+import {
+  StyleSheet,
+  View,
+  ToastAndroid,
+  KeyboardAvoidingView,
+  Image,
+  TextStyle,
+  Text,
+  Keyboard,
+  ScrollView,
+  TouchableOpacity,
+  ImageBackground
+} from 'react-native';
+
+import '../g.js'
+
+
+
+export default class HomeScreen extends React.Component {
+
+
+  constructor(props) {
+    super(props);
+    Keyboard.dismiss();
+    this.state = {
+      'techId': '',
+      'techName': ''
+    };
+
+  }
+
+  componentDidMount() {
+    // get technician info.
+    let techId = this.props.navigation.state.params.techId;
+    return fetch(global.baseIp + '/techs/' + techId)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        techId: techId,
+        techName: responseJson.name
+
+    }, function(){
+      console.log(responseJson)
+
+    });
+
+  })
+  .catch((error) =>{
+    console.error(error);
+  });
+
+}
+
+
+
+
+  render() {
+    
+    return (
+      <View style={styles.container}>
+
+        <View style={styles.avatarBox}>
+          <Image source={require('../images/avatar.png')}/>
+          <Text style={styles.techName}>{this.state.techName}</Text>
+          <Text style={styles.smallText}> ID: {this.state.techId}</Text>
+          <View style={styles.techInfo}>
+            <Text style={styles.smallTextBlue}>Route {this.state.techId}: </Text>
+            <Text style={styles.smallText}>East Bakersfield</Text>
+          </View>
+          <View style={styles.techInfo}>
+            <Text style={styles.smallTextBlue}>License: </Text>
+            <Text style={styles.smallText}>Branch 2</Text>
+          </View>
+        </View>
+
+        <ScrollView horizontal style={styles.scrollView}>
+          <View style={styles.mainscreen}>
+            <TouchableOpacity
+              style={styles.box}
+              onPress={this.show_route_screen.bind(this)}>
+              <Image source={require('../images/route.png')} />
+              <Text style={styles.boxtext}>
+                Route
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.box}
+              onPress={this.show_route_screen.bind(this)}>
+              <Image source={require('../images/home.png')} />
+              <Text style={styles.boxtext}>
+                Properties
+                </Text>
+            </TouchableOpacity>
+
+
+            <TouchableOpacity
+              style={styles.box}
+              onPress={this.show_route_screen.bind(this)}>
+              <Image source={require('../images/contract.png')} />
+              <Text style={styles.boxtext}>
+                Service
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.box}
+              onPress={this.show_route_screen.bind(this)}>
+              <Text style={styles.boxtext}>
+                ???
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.box}
+              onPress={this.show_route_screen.bind(this)}>
+              <Text style={styles.boxtext}>
+                ???
+                </Text>
+            </TouchableOpacity>
+          </View>
+
+
+
+        </ScrollView>
+      </View>
+    );
+  }
+
+  show_route_screen() {
+    // this.props.navigation.navigate('RouteScreen');
+  }
+
+  show_properties_screen() {
+    // this.props.navigation.navigate('PropertyListScreen');
+  }
+
+
+
+
+}
+
+
+
+styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: global.colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 1
+  },
+  box: {
+    height: 80,
+    width: global.width * .23,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: global.colors.glass,
+    borderColor: 'transparent',
+    borderRadius: 0,
+    margin: 1
+  },
+  boxtext: {
+    color: '#fff',
+    alignItems: 'center'
+  },
+  mainscreen: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+  },
+  scrollView: {
+    backgroundColor: 'transparent'
+  },
+  avatarBox:{
+    flex: 6,
+    backgroundColor: 'transparent',
+    width: global.width,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  techName: {
+    fontSize: 35,
+    color: '#fff',
+    marginLeft: 5,
+    marginTop: 10
+  },
+  smallText:{
+    color: '#fff',
+  },
+  smallTextGreen:{
+    color: '#2ecc71',
+  },
+  smallTextBlue:{
+    color: '#66BB6A',
+  },
+  techInfo:{
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+});
