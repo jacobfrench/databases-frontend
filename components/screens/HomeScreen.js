@@ -52,9 +52,6 @@ export default class HomeScreen extends React.Component {
 
 }
 
-
-
-
   render() {
     
     return (
@@ -63,10 +60,9 @@ export default class HomeScreen extends React.Component {
         <View style={styles.avatarBox}>
           <Image source={require('../images/avatar.png')}/>
           <Text style={styles.techName}>{this.state.techName}</Text>
-          <Text style={styles.smallText}> ID: {this.state.techId}</Text>
           <View style={styles.techInfo}>
-            <Text style={styles.smallTextBlue}>Route {this.state.techId}: </Text>
-            <Text style={styles.smallText}>East Bakersfield</Text>
+          <Text style={styles.smallTextBlue}> ID: </Text>
+          <Text style={styles.smallText}>{this.state.techId}</Text>
           </View>
           <View style={styles.techInfo}>
             <Text style={styles.smallTextBlue}>License: </Text>
@@ -78,7 +74,7 @@ export default class HomeScreen extends React.Component {
           <View style={styles.mainscreen}>
             <TouchableOpacity
               style={styles.box}
-              onPress={this.show_route_screen.bind(this)}>
+              onPress={this.showPropertyListScreen.bind(this)}>
               <Image source={require('../images/route.png')} />
               <Text style={styles.boxtext}>
                 Route
@@ -87,7 +83,7 @@ export default class HomeScreen extends React.Component {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={this.show_route_screen.bind(this)}>
+              onPress={this.func.bind(this)}>
               <Image source={require('../images/home.png')} />
               <Text style={styles.boxtext}>
                 Properties
@@ -97,7 +93,7 @@ export default class HomeScreen extends React.Component {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={this.show_route_screen.bind(this)}>
+              onPress={this.func.bind(this)}>
               <Image source={require('../images/contract.png')} />
               <Text style={styles.boxtext}>
                 Service
@@ -106,7 +102,7 @@ export default class HomeScreen extends React.Component {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={this.show_route_screen.bind(this)}>
+              onPress={this.func.bind(this)}>
               <Text style={styles.boxtext}>
                 ???
                 </Text>
@@ -114,7 +110,7 @@ export default class HomeScreen extends React.Component {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={this.show_route_screen.bind(this)}>
+              onPress={this.func.bind(this)}>
               <Text style={styles.boxtext}>
                 ???
                 </Text>
@@ -128,13 +124,15 @@ export default class HomeScreen extends React.Component {
     );
   }
 
-  show_route_screen() {
-    // this.props.navigation.navigate('RouteScreen');
+  showPropertyListScreen() {
+    this.props.navigation.navigate('PropertyListScreen', this.state.techId);
   }
 
   show_properties_screen() {
     // this.props.navigation.navigate('PropertyListScreen');
   }
+
+  func(){}
 
 
 

@@ -3,7 +3,7 @@ import { StackNavigator } from 'react-navigation';
 import { StyleSheet, Text, View, TextInput, YellowBox } from 'react-native';
 import LoginScreen from './components/screens/LoginScreen.js';
 import HomeScreen from './components/screens/HomeScreen.js';
-import RouteListScreen from './components/screens/RouteListScreen.js';
+import PropertyListScreen from './components/screens/PropertyListScreen.js';
 
 //ignore component deprication warnings
 YellowBox.ignoreWarnings(['Warning: component']);
@@ -26,20 +26,17 @@ const AppNavigator = StackNavigator({
   HomeScreen: {
     screen: HomeScreen,
     navigationOptions: {
-      title: 'Home',
-      headerStyle: { backgroundColor: global.colors.header },   //header background color
-      headerTitleStyle: { color: '#444' },                      //header text color
-      headerTintColor: '#444',                                  //header button icon color
+      title: 'Home',                             
       header: false
     },
   },
-  RouteListScreen: {
-    screen: RouteListScreen,
+  PropertyListScreen: {
+    screen: PropertyListScreen,
     navigationOptions: {
-      title: 'Home',
+      title: 'My Route',
       headerStyle: { backgroundColor: global.colors.header },   //header background color
-      headerTitleStyle: { color: '#444' },                      //header text color
-      headerTintColor: '#444',                                  //header button icon color
+      headerTitleStyle: { color: '#fff' },                      //header text color
+      headerTintColor: '#fff',                                  //header button icon color
     },
   }
 
