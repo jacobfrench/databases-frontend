@@ -10,7 +10,7 @@ export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      techId: 3
+      techId: 1
     };
   }
 
@@ -103,6 +103,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff'
+  },
+  textBold:{
+
   },
   buttonView: {
     flexDirection: 'row',

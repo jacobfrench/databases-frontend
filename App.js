@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, TextInput, YellowBox } from 'react-native';
 import LoginScreen from './components/screens/LoginScreen.js';
 import HomeScreen from './components/screens/HomeScreen.js';
 import PropertyListScreen from './components/screens/PropertyListScreen.js';
+import PropertyDetailScreen from './components/screens/PropertyDetailScreen.js';
 
 //ignore component deprication warnings
 YellowBox.ignoreWarnings(['Warning: component']);
@@ -34,6 +35,15 @@ const AppNavigator = StackNavigator({
     screen: PropertyListScreen,
     navigationOptions: {
       title: 'My Route',
+      headerStyle: { backgroundColor: global.colors.header },   //header background color
+      headerTitleStyle: { color: '#fff' },                      //header text color
+      headerTintColor: '#fff',                                  //header button icon color
+    },
+  },
+  PropertyDetailScreen: {
+    screen: PropertyDetailScreen,
+    navigationOptions: {
+      title: 'Property Detail',
       headerStyle: { backgroundColor: global.colors.header },   //header background color
       headerTitleStyle: { color: '#fff' },                      //header text color
       headerTintColor: '#fff',                                  //header button icon color

@@ -2,23 +2,27 @@ import React from 'react';
 import {
   StyleSheet, Text, View,
   TextInput, TouchableOpacity,
-  FlatList, ScrollView
+  ListView, FlatList, ScrollView
 } from 'react-native';
+import { ListItem } from 'react-native-elements'
+
 import '../g.js'
 
+
+
+
 export default class PropertyListScreen extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      // selected: (new Map(): Map<string, boolean>),
+  constructor(){
+    super();
+      this.state = {
       properties: [],
       routeId: null,
       routeName: ''
   
-    };
+    };  
   }
-  
 
+  
   componentDidMount(){
     let routeId = this.props.navigation.state.params;
         // get route info.
@@ -31,7 +35,6 @@ export default class PropertyListScreen extends React.Component {
             properties: responseJson.relatedProperties
     
         }, function(){
-          console.log(this.state.properties[0]);
     
         });
     
@@ -41,27 +44,26 @@ export default class PropertyListScreen extends React.Component {
       });
   }
 
-  _onPressItem(){}
+  showPropertyDetail(id){
+    this.props.navigation.navigate('PropertyDetailScreen', id);
 
-  _renderItem = ({item}) => (
-    <PropertyItem
-      id={item.id}
-      onPressItem={this._onPressItem}
-      selected={'selected'}
-      address={'12309 Quiet Pasture Dr.'}
-      zipCode={'93312'}
-      style={{margin: 10, padding:10}}
-    />
-  );
+  }
 
   render() {
     return (
       <View style={styles.container}>
+      <Text style={styles.header}>{this.state.routeName}</Text>
         <ScrollView style={styles.scrollContainer}>
-          <FlatList
-            data={[{key:'a'}]}
-            renderItem={this._renderItem}
-          />
+          {
+            this.state.properties.map((l, i) => (
+              <ListItem
+                key={i}
+                title={l.propertyType}
+                subtitle={l.streetAddress}
+                onPress={this.showPropertyDetail.bind(this, l.id)}
+              />
+            ))
+          }
         </ScrollView>
       </View>
         
@@ -69,44 +71,16 @@ export default class PropertyListScreen extends React.Component {
   }
 }
 
-
-// List item Component in FlatList
-class PropertyItem extends React.Component {
-  _onPress = () => {
-    this.props.onPressItem(this.props.id);
-  };
-
-  render() {
-    const textColor = this.props.selected ? "white" : "white";
-    return (
-      <TouchableOpacity onPress={this._onPress} style={styles.listItem} shadow>
-        <View>
-          <Text style={styles.title}>
-            {this.props.address}
-          </Text>
-          <Text style={styles.title}>
-            {this.props.zipCode}
-          </Text>
-          
-        </View>
-      </TouchableOpacity>
-    );
-  }
-}
-
-
-
 // Style sheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: global.colors.background,
-    alignItems: 'center',
     justifyContent: 'center',
   },
   scrollContainer:{
       flex: 1,
-      backgroundColor: global.colors.primary,
+      backgroundColor: 'white',
       margin:2
   },
   listItem:{
@@ -120,5 +94,10 @@ const styles = StyleSheet.create({
   title:{
     margin:0,
     color: 'white',
+  },
+  header:{
+    color: 'white',
+    fontSize: 24,
+    margin: 5
   }
 });
