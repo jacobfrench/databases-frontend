@@ -58,8 +58,8 @@ export default class PropertyListScreen extends React.Component {
             this.state.properties.map((l, i) => (
               <ListItem
                 key={i}
-                title={l.propertyType}
-                subtitle={l.streetAddress}
+                title={l.streetAddress}
+                subtitle={l.propertyType}
                 onPress={this.showPropertyDetail.bind(this, l.id)}
               />
             ))
@@ -75,7 +75,7 @@ export default class PropertyListScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: global.colors.background,
+    backgroundColor: '#2980b9',
     justifyContent: 'center',
   },
   scrollContainer:{

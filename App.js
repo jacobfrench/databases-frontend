@@ -48,7 +48,7 @@ const AppNavigator = StackNavigator({
       headerTitleStyle: { color: '#fff' },                      //header text color
       headerTintColor: '#fff',                                  //header button icon color
     },
-  }
+  },
 
 });
 

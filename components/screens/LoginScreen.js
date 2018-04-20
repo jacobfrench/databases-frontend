@@ -25,7 +25,7 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ImageBackground style={styles.container} source={require('../images/background.jpg')}>
         <Image source={require('../images/logo.png')} />
         <KeyboardAvoidingView style={styles.formContainer} behavior='padding'>
           <TextInput
@@ -58,7 +58,7 @@ export default class Login extends React.Component {
           </TouchableOpacity>
         </View>
         <Text style={styles.text}>Forgot your password? Tap Here.</Text>
-      </View>
+      </ImageBackground>
     );
   }
 }

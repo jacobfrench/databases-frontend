@@ -38,7 +38,8 @@ export default class HomeScreen extends React.Component {
     .then((responseJson) => {
       this.setState({
         techId: techId,
-        techName: responseJson.name
+        techName: responseJson.name,
+        licenseType: responseJson.licenseType
 
     }, function(){
       console.log(responseJson)
@@ -56,7 +57,6 @@ export default class HomeScreen extends React.Component {
     
     return (
       <View style={styles.container}>
-
         <View style={styles.avatarBox}>
           <Image source={require('../images/avatar.png')}/>
           <Text style={styles.techName}>{this.state.techName}</Text>
@@ -66,7 +66,7 @@ export default class HomeScreen extends React.Component {
           </View>
           <View style={styles.techInfo}>
             <Text style={styles.smallTextBlue}>License: </Text>
-            <Text style={styles.smallText}>Branch 2</Text>
+            <Text style={styles.smallText}>{this.state.licenseType}</Text>
           </View>
         </View>
 
@@ -83,20 +83,10 @@ export default class HomeScreen extends React.Component {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={this.func.bind(this)}>
-              <Image source={require('../images/home.png')} />
-              <Text style={styles.boxtext}>
-                Properties
-                </Text>
-            </TouchableOpacity>
-
-
-            <TouchableOpacity
-              style={styles.box}
-              onPress={this.func.bind(this)}>
+              onPress={this.showInvoiceCreateScreen.bind(this)}>
               <Image source={require('../images/contract.png')} />
               <Text style={styles.boxtext}>
-                Service
+                Invoice
                 </Text>
             </TouchableOpacity>
 
@@ -116,9 +106,6 @@ export default class HomeScreen extends React.Component {
                 </Text>
             </TouchableOpacity>
           </View>
-
-
-
         </ScrollView>
       </View>
     );
@@ -128,24 +115,19 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.navigate('PropertyListScreen', this.state.techId);
   }
 
-  show_properties_screen() {
-    // this.props.navigation.navigate('PropertyListScreen');
+  showInvoiceCreateScreen() {
+    this.props.navigation.navigate('InvoiceCreateScreen');
   }
 
   func(){}
 
-
-
-
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: global.colors.background,
+    backgroundColor: '#2980b9',
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: 1

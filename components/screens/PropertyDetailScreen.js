@@ -88,7 +88,7 @@ export default class PropertyDetailScreen extends React.Component {
           Phone: {c.phoneNum}
         </Text>
         <Button
-          backgroundColor={global.colors.background}
+          backgroundColor={global.colors.primary}
           fontFamily='Roboto'
           buttonStyle={{borderRadius: 100, marginLeft: 0, marginRight: 0, marginBottom: 0}}
           title='Create Invoice'
