@@ -18,11 +18,9 @@ export default class PropertyListScreen extends React.Component {
       properties: [],
       routeId: null,
       routeName: ''
-  
-    };  
+    };
   }
 
-  
   componentDidMount(){
     let routeId = this.props.navigation.state.params;
         // get route info.
