@@ -11,7 +11,7 @@ import {
   ToastAndroid
 
 } from 'react-native';
-import {Card, Button} from 'react-native-elements';
+import {Card, Button, CheckBox} from 'react-native-elements';
 
 import '../g.js'
 
@@ -21,16 +21,29 @@ export default class PropertyDetailScreen extends React.Component {
     this.state = {
       property: {},
       customer: {},
-      contract:{},
       modalVisible: false,
-      year: '',
-      month: '',
-      day: ''
+      year: '2018',
+      month: '01',
+      day: '01',
+      problem: '',
+      salesPerson: '',
+      pests: [],
+      checked1: false,
+      checked2: false,
+      checked3: false,
+      checked4: false,
+      checked5: false,
+      checked6: false,
+      checked7: false,
+      checked8: false,
+      checked9: false,
+      checked10: false,
     };
 
   }
 
   postNewContract(){
+    let date = this.state.year + '-' + this.state.month + '-' + this.state.day
     fetch(global.baseIp + '/contracts', {
       method: 'POST',
       headers: {
@@ -38,20 +51,20 @@ export default class PropertyDetailScreen extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        salesPerson: 'name',
-        serviceDate: '2018-04-22',
-        price: 50.55,
-        problemDesc: 'Ants in kitchen',
+        salesPerson: this.state.salesPerson,
+        serviceDate: date,
+        price: parseFloat(this.state.price), 
+        problemDesc: this.state.problem,
         property: {id:this.state.property.id},
-        pests:[{id:1}, {id:2}]
+        pests:this.state.pests
       }),
     });
     try {
       ToastAndroid.show('Contract Created.', ToastAndroid.LONG);
     }
-  catch(err) {
+    catch(err) {
       
-  }
+    }
 
   }
 
@@ -78,11 +91,31 @@ export default class PropertyDetailScreen extends React.Component {
 
 
 }
-formatPhoneNumber(s) {
-  var s2 = (""+s).replace(/\D/g, '');
-  var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
-  return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
-}
+  formatPhoneNumber(s) {
+    var s2 = (""+s).replace(/\D/g, '');
+    var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
+    return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
+  }
+
+  addPests(){
+    pestIds = []
+    pestIds.push(this.state.checked1);
+    pestIds.push(this.state.checked2);
+    pestIds.push(this.state.checked3);
+    pestIds.push(this.state.checked4);
+    pestIds.push(this.state.checked5);
+    pestIds.push(this.state.checked6);
+    pestIds.push(this.state.checked7);
+    pestIds.push(this.state.checked8);
+    pestIds.push(this.state.checked9);
+    pestIds.push(this.state.checked10);
+    for(i=0; i < pestIds.length; i++){
+      if(pestIds[i] == true){
+        this.state.pests.push({id:(i+1)});
+      }
+    }
+    
+  }
   
 
   render() {
@@ -99,45 +132,46 @@ formatPhoneNumber(s) {
             this.setModalVisible(false);
           }}>
           <View style={{marginTop: 22}}>
-            <View>
+            <View style={styles.innerView}>
               <TextInput
                 style={styles.input}
                 underlineColorAndroid='black'
                 placeholder='Sales Person'
+                onChangeText={(text) => this.setState({salesPerson: text})}
               />
               <View style={styles.pickerView}>
                 <Picker
                   prompt='Month'
-                  selectedValue={this.state.language}
+                  selectedValue={this.state.month}
                   style={{ height: 50, width: 100 }}
-                  onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
-                  <Picker.Item label="Jan." value="1" />
-                  <Picker.Item label="Feb." value="2" />
-                  <Picker.Item label="Mar." value="3" />
-                  <Picker.Item label="Apr." value="4" />
-                  <Picker.Item label="May." value="5" />
-                  <Picker.Item label="Jun." value="6" />
-                  <Picker.Item label="Jul." value="7" />
-                  <Picker.Item label="Aug." value="8" />
-                  <Picker.Item label="Sep." value="9" />
+                  onValueChange={(itemValue, itemIndex) => this.setState({month: itemValue})}>
+                  <Picker.Item label="Jan." value="01" />
+                  <Picker.Item label="Feb." value="02" />
+                  <Picker.Item label="Mar." value="03" />
+                  <Picker.Item label="Apr." value="04" />
+                  <Picker.Item label="May." value="05" />
+                  <Picker.Item label="Jun." value="06" />
+                  <Picker.Item label="Jul." value="07" />
+                  <Picker.Item label="Aug." value="08" />
+                  <Picker.Item label="Sep." value="09" />
                   <Picker.Item label="Oct." value="10" />
                   <Picker.Item label="Nov." value="11" />
                   <Picker.Item label="Dec." value="12" />
                 </Picker>
                 <Picker
                   prompt='Day'
-                  selectedValue={this.state.language}
+                  selectedValue={this.state.day}
                   style={{ height: 50, width: 100 }}
-                  onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
-                  <Picker.Item label="1" value="1" />
-                  <Picker.Item label="2" value="2" />
-                  <Picker.Item label="3" value="3" />
-                  <Picker.Item label="4" value="4" />
-                  <Picker.Item label="5" value="5" />
-                  <Picker.Item label="6" value="6" />
-                  <Picker.Item label="7" value="7" />
-                  <Picker.Item label="8" value="8" />
-                  <Picker.Item label="9" value="9" />
+                  onValueChange={(itemValue, itemIndex) => this.setState({day: itemValue})}>
+                  <Picker.Item label="1" value="01" />
+                  <Picker.Item label="2" value="02" />
+                  <Picker.Item label="3" value="03" />
+                  <Picker.Item label="4" value="04" />
+                  <Picker.Item label="5" value="05" />
+                  <Picker.Item label="6" value="06" />
+                  <Picker.Item label="7" value="07" />
+                  <Picker.Item label="8" value="08" />
+                  <Picker.Item label="9" value="09" />
                   <Picker.Item label="10" value="10" />
                   <Picker.Item label="11" value="11" />
                   <Picker.Item label="12" value="12" />
@@ -163,9 +197,9 @@ formatPhoneNumber(s) {
                 </Picker>
                 <Picker
                   prompt='Year'
-                  selectedValue={this.state.language}
+                  selectedValue={this.state.year}
                   style={{ height: 50, width: 100 }}
-                  onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
+                  onValueChange={(itemValue, itemIndex) => this.setState({year: itemValue})}>
                   <Picker.Item label="2018" value="2018" />
                   <Picker.Item label="2019" value="2019" />
                   <Picker.Item label="2020" value="2020" />
@@ -176,24 +210,93 @@ formatPhoneNumber(s) {
                   underlineColorAndroid='black'
                   keyboardType='numeric'
                   placeholder='$0.00'
+                  onChangeText={(text) => this.setState({price:text})}
                 />
                  <TextInput
                   style={styles.input}
                   underlineColorAndroid='black'
                   placeholder='Problem Description'
+                  onChangeText={(text) => this.setState({problem: text})}
                 />
 
-              <Button
+              <View style={styles.checkBoxView}>
+                <CheckBox
+                  title='Argentine Ants'
+                  onPress={() => this.setState({checked1: !this.state.checked1})}
+                  checked={this.state.checked1}
+                />
+                <CheckBox
+                  title='Fire Ants'
+                  onPress={() => this.setState({checked2: !this.state.checked2})}
+                  checked={this.state.checked2}
+                />
+              </View>
+
+              <View style={styles.checkBoxView}>
+                <CheckBox
+                  title='Earwigs'
+                  onPress={() => this.setState({checked3: !this.state.checked3})}
+                  checked={this.state.checked3}
+                />
+                <CheckBox
+                  title='American Cockroaches'
+                  onPress={() => this.setState({checked6: !this.state.checked6})}
+                  checked={this.state.checked6}
+                />
+              </View>
+
+              <View style={styles.checkBoxView}>
+                <CheckBox
+                  title='German Cockroaches'
+                  onPress={() => this.setState({checked5: !this.state.checked5})}
+                  checked={this.state.checked5}
+                />
+                <CheckBox
+                  title='Brown Rat'
+                  onPress={() => this.setState({checked4: !this.state.checked4})}
+                  checked={this.state.checked4}
+                />
+              </View>
+
+              <View style={styles.checkBoxView}>
+                <CheckBox
+                  title='Gray Mouse'
+                  onPress={() => this.setState({checked7: !this.state.checked7})}
+                  checked={this.state.checked7}
+                />
+                <CheckBox
+                  title='Bed Bugs'
+                  onPress={() => this.setState({checked8: !this.state.checked8})}
+                  checked={this.state.checked8}
+                />
+              </View>
+
+              <View style={styles.checkBoxView}>
+                <CheckBox
+                  title='Pharoh Ants'
+                  onPress={() => this.setState({checked9: !this.state.checked9})}
+                  checked={this.state.checked9}
+                />
+                <CheckBox
+                  title='Indian Meal Moths'
+                  onPress={() => this.setState({checked10: !this.state.checked10})}
+                  checked={this.state.checked10}
+                />
+              </View>
+            </View>
+            <Button
                 backgroundColor={global.colors.primary}
                 fontFamily='Roboto'
                 buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
                 title='OK'
                 onPress={() => {
+                  this.addPests();
                   this.postNewContract();
                   this.setModalVisible(!this.state.modalVisible);
+
                 }}>
               </Button>
-            </View>
+
           </View>
         </Modal>
 
@@ -237,8 +340,6 @@ formatPhoneNumber(s) {
               onPress={this.setModalVisible.bind(this, true)}
           />
         </Card>
-
-     
       </ScrollView>
     );
   }
@@ -283,6 +384,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  checkBoxView:{
+    flexDirection: 'row'
+  },
+  innerView:{
+    paddingBottom: 15
   }
 
 });

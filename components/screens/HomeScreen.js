@@ -86,7 +86,7 @@ export default class HomeScreen extends React.Component {
               onPress={this.showInvoiceCreateScreen.bind(this)}>
               <Image source={require('../images/contract.png')} />
               <Text style={styles.boxtext}>
-                Invoice
+                Contracts
                 </Text>
             </TouchableOpacity>
 
