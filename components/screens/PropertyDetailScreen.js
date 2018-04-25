@@ -125,7 +125,7 @@ export default class PropertyDetailScreen extends React.Component {
       <ScrollView style={styles.container}>
       <Modal
           style={styles.modal}
-          animationType="slide"
+          animationType="fade"
           transparent={false}
           visible={this.state.modalVisible}
           onRequestClose={() => {

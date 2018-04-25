@@ -83,7 +83,7 @@ export default class HomeScreen extends React.Component {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={this.showInvoiceCreateScreen.bind(this)}>
+              onPress={this.showContractListScreen.bind(this)}>
               <Image source={require('../images/contract.png')} />
               <Text style={styles.boxtext}>
                 Contracts
@@ -115,8 +115,8 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.navigate('PropertyListScreen', this.state.techId);
   }
 
-  showInvoiceCreateScreen() {
-    this.props.navigation.navigate('InvoiceCreateScreen');
+  showContractListScreen() {
+    this.props.navigation.navigate('ContractListScreen');
   }
 
   func(){}

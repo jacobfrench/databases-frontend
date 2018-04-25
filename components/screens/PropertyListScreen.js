@@ -33,6 +33,8 @@ export default class PropertyListScreen extends React.Component {
             properties: responseJson.relatedProperties
     
         }, function(){
+
+  
     
         });
     
@@ -50,8 +52,9 @@ export default class PropertyListScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-      <Text style={styles.header}>{this.state.routeName}</Text>
+        <Text style={styles.header}>{this.state.routeName}</Text>
         <ScrollView style={styles.scrollContainer}>
+        
           {
             this.state.properties.map((l, i) => (
               <ListItem
@@ -64,9 +67,10 @@ export default class PropertyListScreen extends React.Component {
           }
         </ScrollView>
       </View>
-        
+
     );
   }
+
 }
 
 // Style sheet
@@ -76,24 +80,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#2980b9',
     justifyContent: 'center',
   },
-  scrollContainer:{
-      flex: 1,
-      backgroundColor: 'white',
-      margin:2
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    margin: 2
   },
-  listItem:{
-    width: global.width*.98,
+  listItem: {
+    width: global.width * .98,
     height: 65,
     backgroundColor: global.colors.glass,
-    padding:5,
-    margin:2,
+    padding: 5,
+    margin: 2,
     borderRadius: 5
   },
-  title:{
-    margin:0,
+  title: {
+    margin: 0,
     color: 'white',
   },
-  header:{
+  header: {
     color: 'white',
     fontSize: 24,
     margin: 5
