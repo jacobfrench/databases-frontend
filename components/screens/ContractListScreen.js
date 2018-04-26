@@ -15,17 +15,12 @@ export default class ContractListScreen extends React.Component {
     this.state = {
         contracts:[],
         modalVisible: false,
+        selectedContract: {}
 
     };
-
-    
-
-  
   }
 
-  _onRefresh(){
 
-  }
 
   componentDidMount(){
     // get route info.
@@ -36,17 +31,7 @@ export default class ContractListScreen extends React.Component {
         contracts:responseJson
     
     }, function(){
-        // for(i=0; i < this.state.contracts.length; i++){
-        //     if(Number.isInteger(this.state.contracts[i].property)){
-        //         for(j=0; j < this.state.contracts.length; j++){
-        //             if(this.state.contracts[j].property.id = this.state.contracts[i].property)
-        //                 this.state.contracts[i].property = this.state.contracts[j].property;
-        //         }
-        //     }
-        //   }
-
-        
-
+    
     });
     
     })
@@ -78,6 +63,8 @@ export default class ContractListScreen extends React.Component {
                     title='Create Invoice'
                     onPress={() => {
                         this.setState({modalVisible: false});
+                        this.props.navigation.navigate('CreateInvoiceScreen', this.state.selectedContract);
+
 
                     }}>
                 </Button>
@@ -90,7 +77,6 @@ export default class ContractListScreen extends React.Component {
                     title='Navigate'
                     onPress={() => {
                         this.setState({modalVisible: false});
-
                     }}>
                 </Button>
               </View>
@@ -113,14 +99,13 @@ export default class ContractListScreen extends React.Component {
         </View>
     );
   }
+
   showModal(c){
     this.setState({modalVisible: true});
-    this.setState({address: c.property.streetAddress})
-
+    this.setState({address: c.property.streetAddress});
+    this.setState({selectedContract: c});
   }
 }
-
-
 
 const styles = StyleSheet.create({
     container: {
