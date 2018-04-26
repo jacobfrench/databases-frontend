@@ -26,17 +26,31 @@ export default class CreateInvoiceSccreen extends React.Component {
     return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
   }
 
-  renderChemicalList(pests){  
-    let pickerItems = [];
-    for(i=0; i < pests.length; i++){
+  renderChemicalList(pests){
+    chems = [];
+    for(i= 0; i < pests.length; i++){
       for(j=0; j < pests[i].effectiveChemicals.length; j++){
-        pickerItems.push(<Picker.Item key={'pickeritems_'}
-        label={pests[i].effectiveChemicals[j].name}
-        value={pests[i].effectiveChemicals[j].name} />);
+        chems.push(
+          <View key={'chemview_'} style={styles.chemView}>
+          <CheckBox
+            key={'chembox_'}
+            title={pests[i].effectiveChemicals[j].name}
+            onPress={this.checked.bind(this)}
+            checked={this.state.checked}
+          />
+        </View>
+        );
+
       }
     }
-    return pickerItems;
+    return chems;
+    
   
+  }
+
+  checked(){
+    this.setState({ checked: !this.state.checked})
+
   }
 
 
@@ -45,45 +59,40 @@ export default class CreateInvoiceSccreen extends React.Component {
     let property = contract.property;
     let customer = property.customer;
     let pests = contract.pests;
-    
     let chemicalList = this.renderChemicalList(pests);
 
     return (
-      <ScrollView style={styles.container}>
-        <Card>
-          <Text style={styles.bold}>Property</Text>
-          <Text>{property.propertyType}</Text>
-          <Text>Address: {property.streetAddress}</Text>
-          <Text>City: {property.city}</Text>
-          <Text>State: {property.state}</Text>
-          <Text>Zip: {property.zipCode}</Text>
-          <Text style={styles.bold}>Customer</Text>
-          <Text>Name: {customer.name}</Text>
-          <Text>Email: {customer.email}</Text>
-          <Text>Phone: {this.formatPhoneNumber(customer.phoneNum)}</Text>
-        </Card>
+      <View style={styles.container}>
+        <ScrollView style={styles.container}>
+          <Card>
+            <Text style={styles.bold}>Property</Text>
+            <Text>{property.propertyType}</Text>
+            <Text>Address: {property.streetAddress}</Text>
+            <Text>City: {property.city}</Text>
+            <Text>State: {property.state}</Text>
+            <Text>Zip: {property.zipCode}</Text>
+            <Text style={styles.bold}>Customer</Text>
+            <Text>Name: {customer.name}</Text>
+            <Text>Email: {customer.email}</Text>
+            <Text>Phone: {this.formatPhoneNumber(customer.phoneNum)}</Text>
+          </Card>
 
-        <Card>
-          <Text style={styles.bold}>Service Information:</Text>
-          <Picker
-            key={'pickers_'}
-            prompt='Chemical Used'
-            selectedValue={this.state.month}
-            style={{ height: 50, width: 250 }}
-            onValueChange={(itemValue, itemIndex) => this.setState({ month: itemValue })}>
+          <Card>
+            <Text style={styles.bold}>Service Information:</Text>
+            <Text >Chemicals Used:</Text>
+
             {chemicalList}
-          </Picker>
-
-          <Button
+            
+          </Card>
+        </ScrollView>
+        <Button
             backgroundColor={global.colors.primary}
             fontFamily='Roboto'
-            buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+            buttonStyle={styles.button}
             title='Create Invoice'
           //   onPress={}
           />
-
-        </Card>
-      </ScrollView>
+      </View>
     );
   }
 
@@ -100,5 +109,15 @@ const styles = StyleSheet.create({
       paddingTop: 10,
       paddingBottom: 5,
       fontSize: 18
+  },
+  button:{
+    borderRadius: 0,
+    marginTop: 5,
+    marginLeft: 0, 
+    marginRight: 0, 
+    marginBottom: 5
+  },
+  chemView:{
+    flexDirection: 'row'
   }
 });
