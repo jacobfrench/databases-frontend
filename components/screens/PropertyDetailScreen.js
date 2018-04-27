@@ -222,11 +222,13 @@ export default class PropertyDetailScreen extends React.Component {
               <View style={styles.checkBoxView}>
                 <CheckBox
                   title='Argentine Ants'
+                  containerStyle={styles.checkBox}
                   onPress={() => this.setState({checked1: !this.state.checked1})}
                   checked={this.state.checked1}
                 />
                 <CheckBox
                   title='Fire Ants'
+                  containerStyle={styles.checkBox}
                   onPress={() => this.setState({checked2: !this.state.checked2})}
                   checked={this.state.checked2}
                 />
@@ -235,11 +237,13 @@ export default class PropertyDetailScreen extends React.Component {
               <View style={styles.checkBoxView}>
                 <CheckBox
                   title='Earwigs'
+                  containerStyle={styles.checkBox}
                   onPress={() => this.setState({checked3: !this.state.checked3})}
                   checked={this.state.checked3}
                 />
                 <CheckBox
                   title='American Cockroaches'
+                  containerStyle={styles.checkBox}
                   onPress={() => this.setState({checked6: !this.state.checked6})}
                   checked={this.state.checked6}
                 />
@@ -248,11 +252,13 @@ export default class PropertyDetailScreen extends React.Component {
               <View style={styles.checkBoxView}>
                 <CheckBox
                   title='German Cockroaches'
+                  containerStyle={styles.checkBox}
                   onPress={() => this.setState({checked5: !this.state.checked5})}
                   checked={this.state.checked5}
                 />
                 <CheckBox
                   title='Brown Rat'
+                  containerStyle={styles.checkBox}
                   onPress={() => this.setState({checked4: !this.state.checked4})}
                   checked={this.state.checked4}
                 />
@@ -261,11 +267,13 @@ export default class PropertyDetailScreen extends React.Component {
               <View style={styles.checkBoxView}>
                 <CheckBox
                   title='Gray Mouse'
+                  containerStyle={styles.checkBox}
                   onPress={() => this.setState({checked7: !this.state.checked7})}
                   checked={this.state.checked7}
                 />
                 <CheckBox
                   title='Bed Bugs'
+                  containerStyle={styles.checkBox}
                   onPress={() => this.setState({checked8: !this.state.checked8})}
                   checked={this.state.checked8}
                 />
@@ -274,11 +282,13 @@ export default class PropertyDetailScreen extends React.Component {
               <View style={styles.checkBoxView}>
                 <CheckBox
                   title='Pharoh Ants'
+                  containerStyle={styles.checkBox}
                   onPress={() => this.setState({checked9: !this.state.checked9})}
                   checked={this.state.checked9}
                 />
                 <CheckBox
                   title='Indian Meal Moths'
+                  containerStyle={styles.checkBox}
                   onPress={() => this.setState({checked10: !this.state.checked10})}
                   checked={this.state.checked10}
                 />
@@ -386,10 +396,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkBoxView:{
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   innerView:{
-    paddingBottom: 15
-  }
+    paddingBottom: 15,
+  },
+  checkBox:{
+    width: global.width*.4,
+  },
+
 
 });

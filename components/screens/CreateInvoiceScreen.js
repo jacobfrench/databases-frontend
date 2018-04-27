@@ -17,7 +17,29 @@ import '../g.js'
 export default class CreateInvoiceSccreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      checked: [],
+      chemicalsUsed: this.getChemcialsUsed(),
+      amounts: []
+    };
+
+
+
+  }
+  
+
+  getChemcialsUsed(){
+    let contract = this.props.navigation.state.params;
+    let pests = contract.pests;
+    let chemicals = []
+    for(i= 0; i < pests.length; i++){
+      for(j=0; j < pests[i].effectiveChemicals.length; j++){
+        chemicals.push(pests[i].effectiveChemicals[j].name);
+      }
+    }
+
+    return Array.from(new Set(chemicals));
+
   }
 
   formatPhoneNumber(s) {
@@ -27,32 +49,57 @@ export default class CreateInvoiceSccreen extends React.Component {
   }
 
   renderChemicalList(pests){
-    chems = [];
-    for(i= 0; i < pests.length; i++){
-      for(j=0; j < pests[i].effectiveChemicals.length; j++){
-        chems.push(
-          <View key={'chemview_'} style={styles.chemView}>
-          <CheckBox
-            key={'chembox_'}
-            title={pests[i].effectiveChemicals[j].name}
-            onPress={this.checked.bind(this)}
-            checked={this.state.checked}
-          />
-        </View>
+    let chemicals = this.state.chemicalsUsed;
+    const {checked} = this.state;
+    views = []
+    for(i= 0; i < chemicals.length; i++){
+        views.push(
+          <View key={'chemview_' + String(i)} style={styles.chemView}>
+            <CheckBox
+              key={'checkbox_' + String(i)}
+              title={chemicals[i]}
+              containerStyle={styles.chemBox}
+              onPress={this.checked.bind(this, i)}
+              checked={this.state.checked[i]} />
+            <TextInput
+              key={'text_' + String(i)}
+              style={styles.input}
+              underlineColorAndroid='black'
+              placeholder='0'
+              keyboardType='numeric'
+              onChangeText={(text) => this.setState({ problem: text })}
+            />
+            <Picker
+              key={'picker_' + String(i)}
+              prompt='Amount'
+              selectedValue={this.state.month}
+              style={{ height: 50, width: 100 }}
+              onValueChange={(itemValue, itemIndex) => this.setState({ month: itemValue })}>
+              <Picker.Item key={'gal_' + String(i)} label="gal." value="gal." />
+              <Picker.Item key={'oz_' + String(i)} label="oz." value="oz." />
+              <Picker.Item key={'lbs_' + String(i)} label="lbs." value="lbs." />
+            </Picker>
+          </View>
         );
-
-      }
     }
-    return chems;
+
+    return views;
     
-  
   }
 
-  checked(){
-    this.setState({ checked: !this.state.checked})
-
+  checked(i){
+    let arr = this.state.checked;
+    arr[i] = !arr[i]
+    this.setState({checked:arr})
   }
 
+  getTargetPests(pests){
+    console.log(pests)
+    p = [];
+    for(i=0; i < pests.length; i++)
+      p.push(<Text key={'p_'+i}>{pests[i].commonName}</Text>);
+    return p
+  }
 
   render() {
     let contract = this.props.navigation.state.params;
@@ -60,6 +107,7 @@ export default class CreateInvoiceSccreen extends React.Component {
     let customer = property.customer;
     let pests = contract.pests;
     let chemicalList = this.renderChemicalList(pests);
+    let pestNames = this.getTargetPests(pests);
 
     return (
       <View style={styles.container}>
@@ -78,11 +126,14 @@ export default class CreateInvoiceSccreen extends React.Component {
           </Card>
 
           <Card>
-            <Text style={styles.bold}>Service Information:</Text>
-            <Text >Chemicals Used:</Text>
+            <Text style={styles.header}>Service Information:</Text>
+            <Text style={styles.bold}>Description</Text>
+            <Text>{contract.problemDesc}</Text>
+            <Text style={styles.bold}>Target Pests</Text>
+            {pestNames}
 
+            <Text style={styles.bold}>Chemicals Used:</Text>
             {chemicalList}
-            
           </Card>
         </ScrollView>
         <Button
@@ -118,6 +169,19 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   chemView:{
+    flex: 1,
     flexDirection: 'row'
-  }
+  },
+  chemBox:{
+    width: global.width*.5
+  },
+  input:{
+    width: global.width*.15
+  },
+  header:{
+    fontWeight: 'bold',
+    paddingTop: 10,
+    paddingBottom: 5,
+    fontSize: 22
+},
 });

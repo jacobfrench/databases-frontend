@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: global.colors.clouds,
         margin: 2
     },
     listItem: {

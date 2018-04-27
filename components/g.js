@@ -18,6 +18,7 @@ global.colors = {
     lightbutton: '#4CAF50',
     glass: 'rgba(255, 255, 255, 0.3)',
     header: '#2980b9',
-    primary: '#2980b9'
+    primary: '#2980b9',
+    clouds: '#ecf0f1'
 }
 

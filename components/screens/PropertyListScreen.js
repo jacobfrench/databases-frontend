@@ -5,11 +5,7 @@ import {
   ListView, FlatList, ScrollView
 } from 'react-native';
 import { ListItem } from 'react-native-elements'
-
 import '../g.js'
-
-
-
 
 export default class PropertyListScreen extends React.Component {
   constructor(){
@@ -34,8 +30,6 @@ export default class PropertyListScreen extends React.Component {
     
         }, function(){
 
-  
-    
         });
     
       })
@@ -46,7 +40,6 @@ export default class PropertyListScreen extends React.Component {
 
   showPropertyDetail(id){
     this.props.navigation.navigate('PropertyDetailScreen', id);
-
   }
 
   render() {
@@ -54,7 +47,6 @@ export default class PropertyListScreen extends React.Component {
       <View style={styles.container}>
         <Text style={styles.header}>{this.state.routeName}</Text>
         <ScrollView style={styles.scrollContainer}>
-        
           {
             this.state.properties.map((l, i) => (
               <ListItem
@@ -67,13 +59,13 @@ export default class PropertyListScreen extends React.Component {
           }
         </ScrollView>
       </View>
-
     );
   }
 
 }
 
-// Style sheet
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -82,7 +74,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: global.colors.clouds,
     margin: 2
   },
   listItem: {

@@ -28,6 +28,7 @@ export default class HomeScreen extends React.Component {
       'techName': ''
     };
 
+
   }
 
   componentDidMount() {
@@ -86,7 +87,7 @@ export default class HomeScreen extends React.Component {
               onPress={this.showContractListScreen.bind(this)}>
               <Image source={require('../images/contract.png')} />
               <Text style={styles.boxtext}>
-                Contracts
+                Schedule
                 </Text>
             </TouchableOpacity>
 
