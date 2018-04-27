@@ -7,10 +7,10 @@ import {
   Modal,
   TextInput,
   Picker,
-  ToastAndroid
+  ToastAndroid,
 
 } from 'react-native';
-import {Card, Button, CheckBox} from 'react-native-elements';
+import {Card, Button, CheckBox, Divider} from 'react-native-elements';
 
 import '../g.js'
 
@@ -18,12 +18,17 @@ export default class CreateInvoiceSccreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: [],
       chemicalsUsed: this.getChemcialsUsed(),
-      amounts: []
+      amounts: 0,
+      inputText: '',
+      modalVisible: false,
+      chemUsed: this.getChemcialsUsed()[0],
+      amount: 0,
+      unit: 'lbs',
+
+      chems: []
+      
     };
-
-
 
   }
   
@@ -38,6 +43,7 @@ export default class CreateInvoiceSccreen extends React.Component {
       }
     }
 
+
     return Array.from(new Set(chemicals));
 
   }
@@ -48,71 +54,59 @@ export default class CreateInvoiceSccreen extends React.Component {
     return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
   }
 
-  renderChemicalList(pests){
-    let chemicals = this.state.chemicalsUsed;
-    const {checked} = this.state;
-    views = []
-    for(i= 0; i < chemicals.length; i++){
-        views.push(
-          <View key={'chemview_' + String(i)} style={styles.chemView}>
-            <CheckBox
-              key={'checkbox_' + String(i)}
-              title={chemicals[i]}
-              containerStyle={styles.chemBox}
-              onPress={this.checked.bind(this, i)}
-              checked={this.state.checked[i]} />
-            <TextInput
-              key={'text_' + String(i)}
-              style={styles.input}
-              underlineColorAndroid='black'
-              placeholder='0'
-              keyboardType='numeric'
-              onChangeText={(text) => this.setState({ problem: text })}
-            />
-            <Picker
-              key={'picker_' + String(i)}
-              prompt='Amount'
-              selectedValue={this.state.month}
-              style={{ height: 50, width: 100 }}
-              onValueChange={(itemValue, itemIndex) => this.setState({ month: itemValue })}>
-              <Picker.Item key={'gal_' + String(i)} label="gal." value="gal." />
-              <Picker.Item key={'oz_' + String(i)} label="oz." value="oz." />
-              <Picker.Item key={'lbs_' + String(i)} label="lbs." value="lbs." />
-            </Picker>
-          </View>
-        );
-    }
-
-    return views;
-    
-  }
-
-  checked(i){
-    let arr = this.state.checked;
-    arr[i] = !arr[i]
-    this.setState({checked:arr})
-  }
 
   getTargetPests(pests){
-    console.log(pests)
     p = [];
     for(i=0; i < pests.length; i++)
       p.push(<Text key={'p_'+i}>{pests[i].commonName}</Text>);
     return p
   }
 
+  submit(){
+    console.log(this.state);
+  }
+
+  getPickerItems(){
+    pickerItems = [];
+    for(let i = 0; i < this.getChemcialsUsed().length; i++){
+      pickerItems.push(
+        <Picker.Item key={'pi_'+ String(i)} 
+          label={this.getChemcialsUsed()[i]}
+          value={this.getChemcialsUsed()[i]} />
+      );
+    }
+    return pickerItems;
+  }
+
+  setModalVisible(visible){
+    this.setState({modalVisible: visible});
+  }
+
+  updateChems(){
+    // console.log(this.state.chemUsed);
+    // console.log(this.state.amount);
+    // console.log(this.state.unit)
+    let a = this.state.chems;
+    a.push(this.state.chemUsed);
+    this.setState({chems: a})
+
+  }
+
+
+
   render() {
     let contract = this.props.navigation.state.params;
     let property = contract.property;
     let customer = property.customer;
     let pests = contract.pests;
-    let chemicalList = this.renderChemicalList(pests);
     let pestNames = this.getTargetPests(pests);
+    let pickerItems = this.getPickerItems();
+    let chems = this.state.chems;
 
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container}>
-          <Card>
+          <Card style={styles.card}>
             <Text style={styles.bold}>Property</Text>
             <Text>{property.propertyType}</Text>
             <Text>Address: {property.streetAddress}</Text>
@@ -125,7 +119,7 @@ export default class CreateInvoiceSccreen extends React.Component {
             <Text>Phone: {this.formatPhoneNumber(customer.phoneNum)}</Text>
           </Card>
 
-          <Card>
+          <Card style={styles.card}>
             <Text style={styles.header}>Service Information:</Text>
             <Text style={styles.bold}>Description</Text>
             <Text>{contract.problemDesc}</Text>
@@ -133,16 +127,81 @@ export default class CreateInvoiceSccreen extends React.Component {
             {pestNames}
 
             <Text style={styles.bold}>Chemicals Used:</Text>
-            {chemicalList}
+            {chems}
+
+            <Button
+                backgroundColor={global.colors.primary}
+                fontFamily='Roboto'
+                buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                title='Add Chemical'
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);}}>
+              </Button>
+            
           </Card>
         </ScrollView>
         <Button
             backgroundColor={global.colors.primary}
             fontFamily='Roboto'
             buttonStyle={styles.button}
-            title='Create Invoice'
-          //   onPress={}
+            title='Submit'
+            onPress={this.submit.bind(this)}
           />
+
+        <Modal
+            style={styles.modal}
+            animationType="slide"
+            transparent={true}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {
+                this.setState({modalVisible: false})}}>
+
+            <View style={styles.modalInner}>
+            <View style={styles.whiteBox}> 
+            <Picker
+                  prompt='Chemical'
+                  selectedValue={this.state.chemUsed}
+                  style={{ height: 50, width: global.width*.8 }}
+                  onValueChange={(itemValue, itemIndex) => this.setState({chemUsed: itemValue})}>
+                  {pickerItems}
+            </Picker>
+            <View style={styles.rowView}>
+              <TextInput
+                  style={styles.input}
+                  underlineColorAndroid='black'
+                  placeholder='0'
+                  keyboardType='numeric'
+                  onChangeText={(amt) => this.setState({amount: amt})}
+                />
+
+                <Picker
+                  prompt='Unit'
+                  selectedValue={this.state.unit}
+                  style={{ height: 50, width: 100 }}
+                  onValueChange={(itemValue, itemIndex) => this.setState({unit: itemValue})}>
+                  <Picker.Item label="gal." value="gal." />
+                  <Picker.Item label="lbs." value="lbs." />
+                  <Picker.Item label="oz." value="oz." />
+                </Picker>
+
+                
+              </View>
+              <Button
+                  backgroundColor={global.colors.primary}
+                  fontFamily='Roboto'
+                  buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                  title='Add'
+                  onPress={() => {
+                    this.updateChems();
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}>
+                </Button>
+
+                
+            </View>
+
+            </View>
+          </Modal>
       </View>
     );
   }
@@ -176,12 +235,45 @@ const styles = StyleSheet.create({
     width: global.width*.5
   },
   input:{
-    width: global.width*.15
+    width: global.width*.15,
+    fontSize: 18,
+    textAlign: 'center'
   },
   header:{
     fontWeight: 'bold',
     paddingTop: 10,
     paddingBottom: 5,
-    fontSize: 22
+    fontSize: 22,
 },
+  card:{
+    backgroundColor: global.colors.clouds
+  },
+  modal:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 150
+
+},
+modalInner:{
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0, 0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+},
+whiteBox:{
+  justifyContent: 'center',
+  // alignItems: 'center',
+  backgroundColor: global.colors.clouds,
+  height: 200,
+  width: global.width*.8,
+  borderRadius: 5
+},
+input:{
+  padding: 10,
+  margin: 10,
+  width: 50
+},
+rowView:{
+  flexDirection: 'row'
+}
 });

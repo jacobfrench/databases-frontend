@@ -61,7 +61,8 @@ export default class ContractListScreen extends React.Component {
                     title='Create Invoice'
                     onPress={() => {
                         this.setState({modalVisible: false});
-                        this.props.navigation.navigate('CreateInvoiceScreen', this.state.selectedContract);
+                        this.props.navigation.navigate('CreateInvoiceScreen',
+                         this.state.selectedContract);
 
                     }}>
                 </Button>
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         flex: 1,
-        backgroundColor: global.colors.clouds,
+        backgroundColor: 'white',
         margin: 2
     },
     listItem: {
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     whiteBox:{
         justifyContent: 'center',
         // alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: global.colors.clouds,
         height: 200,
         width: global.width*.8,
         borderRadius: 5
