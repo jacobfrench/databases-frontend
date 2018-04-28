@@ -22,7 +22,7 @@ export default class ContractListScreen extends React.Component {
 
   componentDidMount(){
     // get route info.
-    return fetch(global.baseIp + '/contracts')
+    return fetch(global.baseIp + '/opencontracts')
     .then((response) => response.json())
     .then((responseJson) => {
         this.setState({

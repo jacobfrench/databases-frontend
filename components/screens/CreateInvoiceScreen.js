@@ -19,16 +19,75 @@ export default class CreateInvoiceSccreen extends React.Component {
     super(props);
     this.state = {
       chemicalsUsed: this.getChemcialsUsed(),
-      amounts: 0,
       inputText: '',
       modalVisible: false,
       chemUsed: this.getChemcialsUsed()[0],
       amount: 0,
-      unit: 'lbs',
+      unit: 'gal.',
+      pestIds: [],
 
-      chems: []
+      chems: [],
+      amounts: [],
+      units:[],
+
+      contractId: 0,
+      date: '2018-27-04',
+      notes: ''
+
       
     };
+
+  }
+
+
+  postNewInvoice(){
+    fetch(global.baseIp + '/invoices', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contract: {id:this.state.contractId},
+        date: this.state.date,
+        notes: this.state.notes
+ 
+      }),
+    });
+    try {
+      ToastAndroid.show('Contract Created.', ToastAndroid.LONG);
+    }
+    catch(err) {
+      
+    }
+
+  }
+  
+  updateContract(){
+    fetch(global.baseIp + '/contracts/'+ this.state.contractId, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+
+ 
+      }),
+    });
+
+  }
+
+  componentDidMount(){
+    let contract = this.props.navigation.state.params;
+    this.setState({contractId: contract.id})
+    let property = contract.property;
+    let customer = property.customer;
+    let pests = contract.pests;
+    for(i=0; i < pests.length; i++){
+      this.state.pestIds.push({id:pests[i].id});
+    }
+    this.setState({pestIds:this.state.pestIds})
 
   }
   
@@ -57,13 +116,15 @@ export default class CreateInvoiceSccreen extends React.Component {
 
   getTargetPests(pests){
     p = [];
-    for(i=0; i < pests.length; i++)
+    for(i=0; i < pests.length; i++){
       p.push(<Text key={'p_'+i}>{pests[i].commonName}</Text>);
-    return p
+    }
+    return p;
   }
 
   submit(){
-    console.log(this.state);
+    this.updateContract();
+    this.postNewInvoice();
   }
 
   getPickerItems(){
@@ -83,12 +144,12 @@ export default class CreateInvoiceSccreen extends React.Component {
   }
 
   updateChems(){
-    // console.log(this.state.chemUsed);
-    // console.log(this.state.amount);
-    // console.log(this.state.unit)
-    let a = this.state.chems;
-    a.push(this.state.chemUsed);
-    this.setState({chems: a})
+    this.state.chems.push(this.state.chemUsed);
+    this.state.amounts.push(this.state.amount);
+    this.state.units.push(this.state.unit);
+    this.setState({chems: this.state.chems})
+    this.setState({amounts: this.state.amounts})
+    this.setState({units: this.state.units})
 
   }
 
@@ -103,7 +164,19 @@ export default class CreateInvoiceSccreen extends React.Component {
     let pickerItems = this.getPickerItems();
     let chems = this.state.chems;
 
+    let cm = this.state.chems.map((c, i) => {
+      return <Text key={'chem_'+i} style={styles.chemText}>{c} </Text>
+    });
+    let amt = this.state.amounts.map((a, i) => {
+      return <Text key={'amt_'+i} >{a} </Text>
+    });
+    let unt = this.state.units.map((u, i) => {
+      return <Text key={'unt_'+i} style={styles.chemText}>{u}</Text>
+    });
+
+
     return (
+      
       <View style={styles.container}>
         <ScrollView style={styles.container}>
           <Card style={styles.card}>
@@ -127,7 +200,18 @@ export default class CreateInvoiceSccreen extends React.Component {
             {pestNames}
 
             <Text style={styles.bold}>Chemicals Used:</Text>
-            {chems}
+            <View style={styles.rowView}>
+              <View style={styles.colView}>
+                {cm}
+              </View>
+              <View style={styles.colView}>
+                {amt}
+              </View>
+              <View style={styles.colView}>
+                {unt}
+              </View>
+            </View>
+
 
             <Button
                 backgroundColor={global.colors.primary}
@@ -158,6 +242,7 @@ export default class CreateInvoiceSccreen extends React.Component {
 
             <View style={styles.modalInner}>
             <View style={styles.whiteBox}> 
+            <Text style={styles.bold}>   Add Chemicals</Text>
             <Picker
                   prompt='Chemical'
                   selectedValue={this.state.chemUsed}
@@ -189,7 +274,8 @@ export default class CreateInvoiceSccreen extends React.Component {
               <Button
                   backgroundColor={global.colors.primary}
                   fontFamily='Roboto'
-                  buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                  buttonStyle={{borderRadius: 0, marginLeft: 0,
+                                marginRight: 0, marginBottom: 0}}
                   title='Add'
                   onPress={() => {
                     this.updateChems();
@@ -264,7 +350,7 @@ whiteBox:{
   justifyContent: 'center',
   // alignItems: 'center',
   backgroundColor: global.colors.clouds,
-  height: 200,
+  height: 250,
   width: global.width*.8,
   borderRadius: 5
 },
@@ -274,6 +360,13 @@ input:{
   width: 50
 },
 rowView:{
-  flexDirection: 'row'
+  flexDirection: 'row',
+  padding: 10
+},
+colView:{
+  flexDirection: 'column'
+},
+chemText:{
+  paddingRight: 10
 }
 });
