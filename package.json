@@ -19,11 +19,15 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@google/maps": "^0.4.6",
     "expo": "^26.0.0",
+    "geocoder": "^0.2.3",
     "native-base": "^2.4.2",
     "react": "16.3.0-alpha.1",
     "react-native": "0.54.0",
     "react-native-elements": "^0.19.1",
+    "react-native-geocoder": "^0.5.0",
+    "react-native-maps": "^0.21.0",
     "react-navigation": "^1.5.9"
   }
 }

@@ -18,27 +18,44 @@ export default class CreateInvoiceSccreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      chemicalsUsed: this.getChemcialsUsed(),
-      inputText: '',
       modalVisible: false,
-      chemUsed: this.getChemcialsUsed()[0],
-      amount: 0,
-      unit: 'gal.',
+
       pestIds: [],
 
-      chems: [],
+
+      //contract info
+      contract: {},
+      pests: [],
+      property: {},
+      customer: {},
+      date: '2018-27-04',
+      notes: '',
+
+      //invoice info
+      chemSelected: this.getAvailableChemicals()[0].name,
+      amountSelected: 0,
+      unitSelected: 'gal.',
+      chemicalsUsedIds: [],
+      chemicalsUsedNames: [],
       amounts: [],
       units:[],
-
-      contractId: 0,
-      date: '2018-27-04',
-      notes: ''
-
-      
     };
 
   }
 
+  componentDidMount(){
+    let contract = this.props.navigation.state.params;
+    let property = contract.property;
+    let customer = property.customer;
+    let pests = contract.pests;
+
+    this.setState({contract: contract});
+    this.setState({pests:contract.pests});
+    this.setState({effectiveChemicals: this.getAvailableChemicals()});
+    this.setState({property: property});
+    this.setState({customer: customer});
+
+  }
 
   postNewInvoice(){
     fetch(global.baseIp + '/invoices', {
@@ -48,14 +65,15 @@ export default class CreateInvoiceSccreen extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        contract: {id:this.state.contractId},
+        contract: {id:this.state.contract.id},
         date: this.state.date,
-        notes: this.state.notes
+        notes: this.state.notes,
+        chemicalsUsed: this.state.chemicalsUsedIds,
  
       }),
     });
     try {
-      ToastAndroid.show('Contract Created.', ToastAndroid.LONG);
+      ToastAndroid.show('Invoice Submitted.', ToastAndroid.LONG);
     }
     catch(err) {
       
@@ -64,7 +82,7 @@ export default class CreateInvoiceSccreen extends React.Component {
   }
   
   updateContract(){
-    fetch(global.baseIp + '/contracts/'+ this.state.contractId, {
+    fetch(global.baseIp + '/contracts/'+ this.state.contract.id, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -78,32 +96,16 @@ export default class CreateInvoiceSccreen extends React.Component {
 
   }
 
-  componentDidMount(){
-    let contract = this.props.navigation.state.params;
-    this.setState({contractId: contract.id})
-    let property = contract.property;
-    let customer = property.customer;
-    let pests = contract.pests;
-    for(i=0; i < pests.length; i++){
-      this.state.pestIds.push({id:pests[i].id});
-    }
-    this.setState({pestIds:this.state.pestIds})
-
-  }
-  
-
-  getChemcialsUsed(){
+  getAvailableChemicals(){
     let contract = this.props.navigation.state.params;
     let pests = contract.pests;
-    let chemicals = []
+    let chemicals = [];
     for(i= 0; i < pests.length; i++){
       for(j=0; j < pests[i].effectiveChemicals.length; j++){
-        chemicals.push(pests[i].effectiveChemicals[j].name);
+        chemicals.push(pests[i].effectiveChemicals[j]);
       }
     }
-
-
-    return Array.from(new Set(chemicals));
+    return chemicals;
 
   }
 
@@ -113,27 +115,13 @@ export default class CreateInvoiceSccreen extends React.Component {
     return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
   }
 
-
-  getTargetPests(pests){
-    p = [];
-    for(i=0; i < pests.length; i++){
-      p.push(<Text key={'p_'+i}>{pests[i].commonName}</Text>);
-    }
-    return p;
-  }
-
-  submit(){
-    this.updateContract();
-    this.postNewInvoice();
-  }
-
   getPickerItems(){
     pickerItems = [];
-    for(let i = 0; i < this.getChemcialsUsed().length; i++){
+    for(let i = 0; i < this.getAvailableChemicals().length; i++){
       pickerItems.push(
         <Picker.Item key={'pi_'+ String(i)} 
-          label={this.getChemcialsUsed()[i]}
-          value={this.getChemcialsUsed()[i]} />
+          label={this.getAvailableChemicals()[i].name}
+          value={this.getAvailableChemicals()[i].name} />
       );
     }
     return pickerItems;
@@ -143,30 +131,38 @@ export default class CreateInvoiceSccreen extends React.Component {
     this.setState({modalVisible: visible});
   }
 
-  updateChems(){
-    this.state.chems.push(this.state.chemUsed);
-    this.state.amounts.push(this.state.amount);
-    this.state.units.push(this.state.unit);
-    this.setState({chems: this.state.chems})
-    this.setState({amounts: this.state.amounts})
-    this.setState({units: this.state.units})
+  getChemIdFromName(){
+    let availableChemicals = this.getAvailableChemicals();
+    for(i=0; i < availableChemicals.length; i++){
+      if(availableChemicals[i].name == this.state.chemSelected)
+        return availableChemicals[i].id
+    }
 
   }
 
+  updateChemicals(){
+    this.state.chemicalsUsedNames.push(this.state.chemSelected);
+    this.state.amounts.push(this.state.amountSelected);
+    this.state.units.push(this.state.unitSelected);
 
+    let chemId = this.getChemIdFromName();
+    this.state.chemicalsUsedIds.push({id:chemId});
+  }
+
+  submit(){
+    this.updateContract();
+    this.postNewInvoice();
+
+  } 
 
   render() {
     let contract = this.props.navigation.state.params;
     let property = contract.property;
     let customer = property.customer;
     let pests = contract.pests;
-    let pestNames = this.getTargetPests(pests);
     let pickerItems = this.getPickerItems();
-    let chems = this.state.chems;
 
-    let cm = this.state.chems.map((c, i) => {
-      return <Text key={'chem_'+i} style={styles.chemText}>{c} </Text>
-    });
+
     let amt = this.state.amounts.map((a, i) => {
       return <Text key={'amt_'+i} >{a} </Text>
     });
@@ -174,9 +170,7 @@ export default class CreateInvoiceSccreen extends React.Component {
       return <Text key={'unt_'+i} style={styles.chemText}>{u}</Text>
     });
 
-
     return (
-      
       <View style={styles.container}>
         <ScrollView style={styles.container}>
           <Card style={styles.card}>
@@ -197,12 +191,17 @@ export default class CreateInvoiceSccreen extends React.Component {
             <Text style={styles.bold}>Description</Text>
             <Text>{contract.problemDesc}</Text>
             <Text style={styles.bold}>Target Pests</Text>
-            {pestNames}
+            {
+              this.state.pests.map((p, i) => (
+                <Text key={'pname_'+i} style={styles.chemText}>{p.commonName}</Text>
+              ))
+            }
 
             <Text style={styles.bold}>Chemicals Used:</Text>
             <View style={styles.rowView}>
               <View style={styles.colView}>
-                {cm}
+                {this.state.chemicalsUsedNames.map((c, i) => 
+                <Text key={'chemn_'+i} style={styles.chemText}>{c} </Text>)}
               </View>
               <View style={styles.colView}>
                 {amt}
@@ -212,14 +211,13 @@ export default class CreateInvoiceSccreen extends React.Component {
               </View>
             </View>
 
-
             <Button
                 backgroundColor={global.colors.primary}
                 fontFamily='Roboto'
                 buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
                 title='Add Chemical'
                 onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);}}>
+                  this.setModalVisible(!this.state.modalVisible)}}>
               </Button>
             
           </Card>
@@ -241,51 +239,50 @@ export default class CreateInvoiceSccreen extends React.Component {
                 this.setState({modalVisible: false})}}>
 
             <View style={styles.modalInner}>
-            <View style={styles.whiteBox}> 
-            <Text style={styles.bold}>   Add Chemicals</Text>
-            <Picker
-                  prompt='Chemical'
-                  selectedValue={this.state.chemUsed}
-                  style={{ height: 50, width: global.width*.8 }}
-                  onValueChange={(itemValue, itemIndex) => this.setState({chemUsed: itemValue})}>
-                  {pickerItems}
-            </Picker>
-            <View style={styles.rowView}>
-              <TextInput
-                  style={styles.input}
-                  underlineColorAndroid='black'
-                  placeholder='0'
-                  keyboardType='numeric'
-                  onChangeText={(amt) => this.setState({amount: amt})}
-                />
+              <View style={styles.whiteBox}> 
+              <Text style={styles.bold}>   Add Chemicals</Text>
+              <Picker
+                    prompt='Chemical'
+                    selectedValue={this.state.chemSelected}
+                    style={{ height: 50, width: global.width*.8, }}
+                    onValueChange={(itemValue, itemIndex) => this.setState({chemSelected: itemValue})}>
+                    {pickerItems}
+              </Picker>
+              <View style={styles.rowView}>
+                <TextInput
+                    style={styles.input}
+                    underlineColorAndroid='black'
+                    placeholder='0'
+                    keyboardType='numeric'
+                    onChangeText={(amt) => this.setState({amountSelected: amt})}
+                  />
 
-                <Picker
-                  prompt='Unit'
-                  selectedValue={this.state.unit}
-                  style={{ height: 50, width: 100 }}
-                  onValueChange={(itemValue, itemIndex) => this.setState({unit: itemValue})}>
-                  <Picker.Item label="gal." value="gal." />
-                  <Picker.Item label="lbs." value="lbs." />
-                  <Picker.Item label="oz." value="oz." />
-                </Picker>
+                  <Picker
+                    prompt='Unit'
+                    selectedValue={this.state.unitSelected}
+                    style={{ height: 50, width: 100 }}
+                    onValueChange={(itemValue, itemIndex) => this.setState({unitSelected: itemValue})}>
+                    <Picker.Item label="gal." value="gal." />
+                    <Picker.Item label="lbs." value="lbs." />
+                    <Picker.Item label="oz." value="oz." />
+                  </Picker>
 
-                
+                  
+                </View>
+                <Button
+                    backgroundColor={global.colors.primary}
+                    fontFamily='Roboto'
+                    buttonStyle={{borderRadius: 0, marginLeft: 0,
+                                  marginRight: 0, marginBottom: 0}}
+                    title='Add'
+                    onPress={() => {
+                      this.updateChemicals();
+                      this.setModalVisible(!this.state.modalVisible);
+                    }}>
+                  </Button>
+
+                  
               </View>
-              <Button
-                  backgroundColor={global.colors.primary}
-                  fontFamily='Roboto'
-                  buttonStyle={{borderRadius: 0, marginLeft: 0,
-                                marginRight: 0, marginBottom: 0}}
-                  title='Add'
-                  onPress={() => {
-                    this.updateChems();
-                    this.setModalVisible(!this.state.modalVisible);
-                  }}>
-                </Button>
-
-                
-            </View>
-
             </View>
           </Modal>
       </View>
@@ -367,6 +364,6 @@ colView:{
   flexDirection: 'column'
 },
 chemText:{
-  paddingRight: 10
+  paddingRight: 35
 }
 });

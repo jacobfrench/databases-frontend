@@ -93,9 +93,10 @@ export default class HomeScreen extends React.Component {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={this.func.bind(this)}>
+              onPress={this.showMapScreen.bind(this)}>
+              <Image source={require('../images/map.png')} />
               <Text style={styles.boxtext}>
-                ???
+                Map
                 </Text>
             </TouchableOpacity>
 
@@ -118,6 +119,11 @@ export default class HomeScreen extends React.Component {
 
   showContractListScreen() {
     this.props.navigation.navigate('ContractListScreen');
+  }
+
+  showMapScreen(){
+    this.props.navigation.navigate('MapScreen');
+
   }
 
   func(){}

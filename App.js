@@ -7,6 +7,7 @@ import PropertyListScreen from './components/screens/PropertyListScreen.js';
 import PropertyDetailScreen from './components/screens/PropertyDetailScreen.js';
 import ContractListScreen from './components/screens/ContractListScreen.js';
 import CreateInvoiceScreen from './components/screens/CreateInvoiceScreen.js';
+import MapScreen from './components/screens/MapScreen.js';
 
 //ignore component deprication warnings
 YellowBox.ignoreWarnings(['Warning: component']);
@@ -64,6 +65,15 @@ const AppNavigator = StackNavigator({
     screen: CreateInvoiceScreen,
     navigationOptions: {
       title: 'Invoice',
+      headerStyle: { backgroundColor: global.colors.header },   //header background color
+      headerTitleStyle: { color: '#fff' },                      //header text color
+      headerTintColor: '#fff',                                  //header button icon color
+    },
+  },
+  MapScreen: {
+    screen: MapScreen,
+    navigationOptions: {
+      title: 'Map',
       headerStyle: { backgroundColor: global.colors.header },   //header background color
       headerTitleStyle: { color: '#fff' },                      //header text color
       headerTintColor: '#fff',                                  //header button icon color
