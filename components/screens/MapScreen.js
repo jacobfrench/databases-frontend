@@ -1,35 +1,52 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { StyleSheet, Text, View, TextInput, YellowBox } from 'react-native';
-import {Button} from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import MapView from 'react-native-maps';
+import '../g.js'
 
 // api key
 // AIzaSyDVs4XJbEc4SXZykpAeDSqPfZMFntmP4lE
-
 
 export default class MapScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             region: {},
-            loc: []
+            loc: [],
+            contracts: [],
 
         }
 
     }
 
     componentDidMount() {
-        this.test();
+        return fetch(global.baseIp + '/opencontracts')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    contracts: responseJson
+
+                }, function () {
+
+                });
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
-    test(){
-        this.getLatLong('CSUB%20Stockdale%20Hwy,%20Bakersfield,%20CA%2093311');
-        this.getLatLong('300%20Galaxy%20Ave,%20Bakersfield,%20CA%2093308');
+    test() {
+        var address = ['CSUB%20Stockdale%20Hwy,%20Bakersfield,%20CA%2093311',
+            '300%20Galaxy%20Ave,%20Bakersfield,%20CA%2093308',
+            '12309 Quiet Pasture Dr. Bakersfield Ca']
+        for (i = 0; i < address.length; i++)
+            this.getLatLong(address[i]);
 
     }
 
-    getLatLong(address){
+    getLatLong(address) {
         return fetch('http://maps.google.com/maps/api/geocode/json?address=' + address)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -39,7 +56,7 @@ export default class MapScreen extends React.Component {
                 }, function () {
                     let location = this.state.region.results[0].geometry.location;
                     this.state.loc.push(location);
-                    this.setState({loc: this.state.loc})
+                    this.setState({ loc: this.state.loc })
 
                 });
 
@@ -51,9 +68,10 @@ export default class MapScreen extends React.Component {
 
     render() {
         let loc = this.state.loc;
-        console.log(this.state);
+        let contracts = this.state.contracts;
         return (
             <View style={styles.container}>
+                {/* center map on Bakersfield */}
                 <MapView style={styles.map}
                     region={{
                         latitude: 35.3733,
@@ -63,21 +81,23 @@ export default class MapScreen extends React.Component {
                     }}>
 
                     {
-                    loc.map((l, i) => (
-                    <MapView.Marker
-                        key={i}
-                        coordinate={{
-                            latitude:  l.lat,
-                            longitude: l.lng,
-                        }}
-                        title={'CSUB Stockdale Hwy, Bakersfield, CA 93311'}
-                        description={'3:00 PM'}
-                    />
-                    ))
+                        loc.map((l, i) => (
+                            <MapView.Marker
+                                key={i}
+                                coordinate={{
+                                    latitude: l.lat,
+                                    longitude: l.lng,
+                                }}
+                                title={'CSUB Stockdale Hwy, Bakersfield, CA 93311'}
+                                description={'3:00 PM'}
+                            />
+                        ))
                     }
+
                 </MapView>
                 <Button
-                    onPress={this.test.bind(this)}
+                    onPress={() => console.log(this.state)}
+                    title={'Print State'}
                 />
 
 

@@ -62,7 +62,7 @@ export default class ContractListScreen extends React.Component {
                     onPress={() => {
                         this.setState({modalVisible: false});
                         this.props.navigation.navigate('CreateInvoiceScreen',
-                         this.state.selectedContract);
+                        this.state.selectedContract);
 
                     }}>
                 </Button>
