@@ -31,7 +31,7 @@ export default class HomeScreen extends React.Component {
 
   }
 
-  componentDidMount() {
+  componentWillMount() {
     // get technician info.
     let techId = this.props.navigation.state.params.techId;
     return fetch(global.baseIp + '/techs/' + techId)
@@ -102,9 +102,10 @@ export default class HomeScreen extends React.Component {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={this.func.bind(this)}>
+              onPress={this.showInvoicesScreen.bind(this)}>
+              <Image source={require('../images/invoice.png')} />
               <Text style={styles.boxtext}>
-                ???
+                Invoices
                 </Text>
             </TouchableOpacity>
           </View>
@@ -123,10 +124,12 @@ export default class HomeScreen extends React.Component {
 
   showMapScreen(){
     this.props.navigation.navigate('MapScreen');
-
   }
 
-  func(){}
+  showInvoicesScreen(){
+    this.props.navigation.navigate('ViewInvoicesScreen');
+  }
+
 
 }
 

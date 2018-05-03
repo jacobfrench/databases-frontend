@@ -72,7 +72,7 @@ export default class PropertyDetailScreen extends React.Component {
     this.setState({modalVisible: visible});
   }
 
-  componentDidMount() {
+  componentWillMount() {
     let propId = this.props.navigation.state.params;
         // get route info.
         return fetch(global.baseIp + '/properties/' + propId)
@@ -89,8 +89,8 @@ export default class PropertyDetailScreen extends React.Component {
         console.error(error);
       });
 
-
 }
+
   formatPhoneNumber(s) {
     var s2 = (""+s).replace(/\D/g, '');
     var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);

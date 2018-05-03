@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { StyleSheet, Text, View, TextInput, YellowBox } from 'react-native';
@@ -8,6 +9,8 @@ import PropertyDetailScreen from './components/screens/PropertyDetailScreen.js';
 import ContractListScreen from './components/screens/ContractListScreen.js';
 import CreateInvoiceScreen from './components/screens/CreateInvoiceScreen.js';
 import MapScreen from './components/screens/MapScreen.js';
+import ViewInvoicesScreen from './components/screens/ViewInvoicesScreen.js';
+import InvoiceDetailScreen from './components/screens/InvoiceDetailScreen.js';
 
 //ignore component deprication warnings
 YellowBox.ignoreWarnings(['Warning: component']);
@@ -64,7 +67,7 @@ const AppNavigator = StackNavigator({
   CreateInvoiceScreen: {
     screen: CreateInvoiceScreen,
     navigationOptions: {
-      title: 'Invoice',
+      title: 'Create Invoice',
       headerStyle: { backgroundColor: global.colors.header },   //header background color
       headerTitleStyle: { color: '#fff' },                      //header text color
       headerTintColor: '#fff',                                  //header button icon color
@@ -79,6 +82,23 @@ const AppNavigator = StackNavigator({
       headerTintColor: '#fff',                                  //header button icon color
     },
   },
+  ViewInvoicesScreen: {
+    screen: ViewInvoicesScreen,
+    navigationOptions: {
+      title: 'Invoices',
+      headerStyle: { backgroundColor: global.colors.header },   //header background color
+      headerTitleStyle: { color: '#fff' },                      //header text color
+      headerTintColor: '#fff',                                  //header button icon color
+    },
+  },
+  InvoiceDetailScreen: {
+    screen: InvoiceDetailScreen,
+    navigationOptions: {
+      title: 'Invoice Detail',
+      headerStyle: { backgroundColor: global.colors.header },   //header background color
+      headerTitleStyle: { color: '#fff' },                      //header text color
+      headerTintColor: '#fff',                                  //header button icon color
+    },
+  },
 
 });
-

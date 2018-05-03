@@ -12,6 +12,9 @@ import {
 } from 'react-native';
 import {Card, Button, CheckBox, Divider} from 'react-native-elements';
 
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import Share from 'react-native-share'
+
 import '../g.js'
 
 export default class CreateInvoiceSccreen extends React.Component {
@@ -19,9 +22,7 @@ export default class CreateInvoiceSccreen extends React.Component {
     super(props);
     this.state = {
       modalVisible: false,
-
       pestIds: [],
-
 
       //contract info
       contract: {},
@@ -43,7 +44,7 @@ export default class CreateInvoiceSccreen extends React.Component {
 
   }
 
-  componentDidMount(){
+  componentWillMount(){
     let contract = this.props.navigation.state.params;
     let property = contract.property;
     let customer = property.customer;
@@ -95,6 +96,7 @@ export default class CreateInvoiceSccreen extends React.Component {
     });
 
   }
+
 
   getAvailableChemicals(){
     let contract = this.props.navigation.state.params;
