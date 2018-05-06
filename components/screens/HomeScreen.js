@@ -13,6 +13,8 @@ import {
   ImageBackground
 } from 'react-native';
 
+import {LinearGradient} from 'expo';
+
 import '../g.js'
 
 
@@ -57,6 +59,7 @@ export default class HomeScreen extends React.Component {
   render() {
     
     return (
+      <LinearGradient colors={['#4FC3F7', '#1565C0']} style={styles.container}>
       <View style={styles.container}>
         <View style={styles.avatarBox}>
           <Image source={require('../images/avatar.png')}/>
@@ -111,6 +114,7 @@ export default class HomeScreen extends React.Component {
           </View>
         </ScrollView>
       </View>
+      </LinearGradient>
     );
   }
 
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#2980b9',
+    // backgroundColor: '#2980b9',
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: 1

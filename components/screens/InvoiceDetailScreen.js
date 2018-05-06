@@ -5,7 +5,8 @@ import {
   KeyboardAvoidingView, ImageBackground, ToastAndroid,
   ScrollView
 } from 'react-native';
-import '../g.js'
+import {LinearGradient} from 'expo';
+import '../g.js';
 
 export default class InvoiceDetailScreen extends React.Component {
   constructor(props) {
@@ -26,9 +27,10 @@ export default class InvoiceDetailScreen extends React.Component {
       return (
           <View style={styles.container}>
               <ScrollView style={styles.scrollContainer}>
-                  <View style={styles.imageHeader}>
+
+                  <LinearGradient style={styles.imageHeader} colors={['#4FC3F7', '#1565C0']}>
                       <Image source={require('../images/logo.png')} />
-                  </View>
+                  </LinearGradient>
 
                   <View style={styles.infoContainer}>
                     <Text style={styles.header}>Invoice</Text>
@@ -56,10 +58,9 @@ export default class InvoiceDetailScreen extends React.Component {
                             </View>
                         ))
                     }
-                    <Text style={styles.indented}>Property Info.</Text>
+                    <Text style={styles.indented}>Address</Text>
                     <Text>{invoice.contract.property.streetAddress}</Text>
-                    <Text>{invoice.contract.property.city}</Text>
-                    <Text>{invoice.contract.property.state}</Text>
+                    <Text>{invoice.contract.property.city}, {invoice.contract.property.state}</Text>
                     <Text>{invoice.contract.property.zipCode}</Text>
 
                     <Text style={styles.indented}>Customer Info.</Text>
